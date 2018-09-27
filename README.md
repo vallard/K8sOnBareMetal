@@ -1,19 +1,21 @@
-# Kubernetes on Bare Metal
+# Kubernetes in the Data Center
 
 A Book for deploying Kubernetes systems on Bare Metal
 
 * [Chapter 1: Kubernetes on Prem](chapters/01-onprem.md)
+	* Introduction
 	* Tradeoffs of OnPrem
 	* Tradeoffs of VMs vs. Bare Metal
+	* Tradeoffs of RYO vs. Buying
 * [Chapter 2: Bare Metal configuration and OS installation](chapters/02-bminstall.md)
 	* Node Configuration and Architecture
 	* Disk space requirements
 	* 
 * [Chapter 3: Linux Configuration](chapters/03-LinuxConfig.md)
 	* Install Docker
-* Kubernetes installation
+* [Kubernetes installation](chapters/04-KubernetesInstallation.md)
 	* kubeadm
-* Kubernetes Networking
+* [Chapter 4: Kubernetes Networking](chapters/05-networking.md)
 	* Overlay Networks: Channel, Calico, Flannel, Weave
 	* MetalLB Load Balancing
 	* Ingress Controllers: Traefik, Nginx, HA-Proxy
@@ -25,9 +27,12 @@ A Book for deploying Kubernetes systems on Bare Metal
 	* Ceph
 * Kubernetes Monitoring
 	* Prometheus
+	* Kibana, Fluentd, ...
 	* Grafana
 	* App Dynamics in a Golang
 * RBAC onPrem
 	* LDAP
+* Private Registry
+	* Harbor
 * Applications on Kubernetes
 	* MySQL, PostgreSQL
