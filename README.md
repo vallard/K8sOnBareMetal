@@ -1,6 +1,7 @@
+<<<<<<< HEAD
 # Kubernetes in the Data Center
 
-A Book for deploying Kubernetes systems on Bare Metal
+A Book for deploying Kubernetes systems in your data center on Bare Metal
 
 * [Chapter 1: Kubernetes on Prem](chapters/01-onprem.md)
 	* Introduction
