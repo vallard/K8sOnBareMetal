@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 # Kubernetes in the Data Center
 
-A Book for deploying Kubernetes systems in your data center on Bare Metal
+A Book for deploying Kubernetes systems on Bare Metal
 
 * [Chapter 1: Kubernetes on Prem](chapters/01-onprem.md)
 	* Introduction
@@ -19,6 +18,11 @@ A Book for deploying Kubernetes systems in your data center on Bare Metal
 * [Chapter 4: Kubernetes Networking](chapters/05-networking.md)
 	* Overlay Networks: Channel, Calico, Flannel, Weave
 	* MetalLB Load Balancing
+
+* [Chapter 5: HA Kubernetes](chapters/05-hakubernetes)
+	* 
+
+* More Networking
 	* Ingress Controllers: Traefik, Nginx, HA-Proxy
 	* Istio
 * Kubernetes Storage
