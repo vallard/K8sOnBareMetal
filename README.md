@@ -2,7 +2,7 @@
 
 A Book for deploying Kubernetes systems on Bare Metal
 
-* [Chapter 1: Kubernetes on Prem](chapters/01-onprem.md)
+* [Chapter 1: Kubernetes on Prem](chapters/01-OnPrem.md)
 	* Introduction
 	* Tradeoffs of OnPrem
 	* Tradeoffs of VMs vs. Bare Metal
