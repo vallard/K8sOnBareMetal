@@ -17,3 +17,5 @@ But in spite of public cloud providers best attempts to sell you their services 
 ## Virtual Machines vs. Bare Metal
 
 ## Roll Your Own (RYO) vs. Buying 
+
+## Architecture of a Bare Metal Kubernetes Cluster

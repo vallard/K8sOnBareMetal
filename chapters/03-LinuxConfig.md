@@ -211,6 +211,12 @@ Notice the ```-t``` in here as we will be prompted at times and need to respond.
 
 Our time is pretty close, but let's get exact with NTP
 
+Disable TimeSyncD time synchronization so we can use NTP. 
+```
+for i in $(seq 3); do ssh kubec-master-0$i sudo timedatectl set-ntp no; done
+for i in $(seq 4); do ssh kubec0$i sudo tiemdatectl set-ntp no; done
+```
+
 ```
 for i in $(seq 3); do ssh kubec-master-0$i sudo apt install -y ntp; done
 for i in $(seq 4); do ssh kubec0$i sudo apt install -y ntp; done
