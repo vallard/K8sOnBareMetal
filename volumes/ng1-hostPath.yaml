@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: ng1
+  name: ng1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: ng1
+  template:
+    metadata:
+      labels:
+        run: ng1
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: <the hostname of one of your workers.>
+      containers:
+      - image: nginx
+        name: ng1
+        volumeMounts: 
+          - name: ngx
+            mountPath: /usr/share/nginx/html/
+      volumes:
+      - name: ngx
+        hostPath:
+          type: DirectoryOrCreate
+          path: /ng1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: ng1
+  name: ng1
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: ng1
+  sessionAffinity: None
+  type: LoadBalancer

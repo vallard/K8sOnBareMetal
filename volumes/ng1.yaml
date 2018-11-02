@@ -1,0 +1,48 @@
+# in this example, the volume only lasts as long as the pod does. 
+# this is for allowing different pods to share a common volume. 
+# They run on the same node.  When one dies, the other can still live. 
+# But if both die: the volume is gone.  
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: ng1
+  name: ng1
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: ng1
+  template:
+    metadata:
+      labels:
+        run: ng1
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: ng1
+        volumeMounts: 
+          - name: ngx
+            mountPath: /usr/share/nginx/html/
+      volumes:
+      - name: ngx
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    run: ng1
+  name: ng1
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: ng1
+  sessionAffinity: None
+  type: LoadBalancer
