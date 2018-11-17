@@ -19,6 +19,18 @@ spec:
       - image: vallard/k8ex7-volume
         imagePullPolicy: Always
         name: volex
+        volumeMounts:
+          - mountPath: /tmp/projected
+            name: volex-vol
+      volumes:
+      - name: volex-vol
+        configMap:
+          name: volex
+          items:
+          - key: bgcolor
+            path: configmap/bgcolor
+          - key: textcolor
+            path: configmap/textcolor
 ---
 apiVersion: v1
 kind: Service
@@ -35,4 +47,3 @@ spec:
   selector:
     run: volex
   type: LoadBalancer
-

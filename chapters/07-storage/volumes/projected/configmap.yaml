@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: volex
+  labels:
+    name: volex
+  namespace: default
+data:
+  bgcolor: "#000"
+  textcolor: "#fff"
+  config: |-
+    ---
+    :version: 1.0
+    :logfile: /var/log/volex.log

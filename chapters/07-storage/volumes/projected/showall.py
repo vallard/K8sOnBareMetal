@@ -15,16 +15,16 @@ def hello_world():
      
     if os.path.exists(user_file):
         with open(user_file) as f:
-            username = f.readlines() 
+            username = f.readline().strip()
     if os.path.exists(password_file):
         with open(password_file) as f:
-            password = f.readlines() 
+            password = f.readline().strip()
     if os.path.exists(bgcolor_file):
         with open(bgcolor_file) as f:
-            bgcolor = f.readlines() 
+            bgcolor = f.readline().strip()
     if os.path.exists(textcolor_file):
         with open(textcolor_file) as f:
-            textcolor = f.readlines() 
+            textcolor = f.readline().strip()
 
     return render_template('showall.html', 
             username = username, 

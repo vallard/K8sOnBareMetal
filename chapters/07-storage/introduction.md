@@ -83,7 +83,11 @@ Let's examine a use case. [`kubeless`](https://kubeless.io) is a function as a s
 
 ##### Persistent Volumes
 
-Persistent volumes are for all other use cases.  Databases, stateful applications, etc.  An example would be a MySQL cluster that can be used for an application.  And yes, even our old friend the WordPress blog can be hosted in a Kubernetes and make use of a Persistent Volume.  
+* Defined outside the context of a Pod
+* Persistent volumes are for all other use cases.  
+* Databases, stateful applications, etc.  An example would be a MySQL cluster that can be used for an application.  
+* Stateful Sets: Our old friend the WordPress blog can be hosted in a Kubernetes and make use of a Persistent Volume. 
+* Require other kubernetes constructs: Storage Classes, Persistent Volume Claims
 
 How these volumes are used are what we'll go into next. 
 
