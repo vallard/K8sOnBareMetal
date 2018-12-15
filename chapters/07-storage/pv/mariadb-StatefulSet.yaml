@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb
+  labels:
+    app: mariadb
+spec:
+  ports:
+    - port: 3306
+      name: mysql
+  selector:
+    app: mariadb
+    tier: mysql-cache
+  clusterIP: 
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: mariadb
+    tier: mysql-cache
+  name: mariadb
+spec:
+  selector:
+    matchLabels:
+      app: mariadb
+      tier: mysql-cache
+  serviceName: mariadb
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: mariadb
+        tier: mysql-cache
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: f00bar123
+          #valueFrom:
+          #  secretKeyRef:
+          #    key: mariadb-pass-root.txt
+          #    name: mariadb-pass-root
+        image: mariadb:10.2.12
+        imagePullPolicy: IfNotPresent
+        name: mariadb
+        ports:
+        - containerPort: 3306
+          name: mysql
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mariadb-persistent-storage
+      restartPolicy: Always
+  updateStrategy:
+    type: RollingUpdate
+  volumeClaimTemplates:
+  - metadata:
+      creationTimestamp: null
+      labels:
+        app: mariadb
+      name: mariadb-persistent-storage
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      selector:
+        matchLabels:
+          app: mariadb
+      storageClassName: hyperflex
+status:
+  replicas: 0
