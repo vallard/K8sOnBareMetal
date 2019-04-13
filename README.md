@@ -4,19 +4,20 @@ A Book for deploying Kubernetes systems on Bare Metal
 
 * [Chapter 1: Kubernetes on Prem](chapters/01-OnPrem.md)
 
-	1. Introduction
-	1. Tradeoffs of OnPrem
-	1. Tradeoffs of VMs vs. Bare Metal
-	1. Tradeoffs of RYO vs. Buying
-	1. Architecture Overview
+	1. Course Introduction
+	2. Understanding Kubernetes
+	3. Kubernetes Architectural Decisions  
+		* Tradeoffs of OnPrem
+		* Tradeoffs of VMs vs. Bare Metal
+		* Tradeoffs of RYO vs. Buying
+		* Our Architecture Overview
 	
 * [Chapter 2: Hardware Configuration](chapters/02-bminstall.md)
 	
-	2. Networking Architecture and Design
-	2. Nework configuration
-	2. Server Architecture and Design
+	2. Networking Architecture, Design, and Configuration
 	2. Storage Architecture and Design
-	2. OS Installation
+	2. Server Architecture and Design
+		* OS Installation
 * [Chapter 3: Linux Configuration](chapters/03-LinuxConfig.md)
 
 	3. ```/etc/hosts```
@@ -27,6 +28,7 @@ A Book for deploying Kubernetes systems on Bare Metal
 	3. Install and Configure Docker
 	3. Testing Docker
 	3. Swap
+	
 * [Chapter 4: Kubernetes installation - Part 1 Server](chapters/04-KubernetesInstallation.md)
 
 	4. Dependencies
@@ -44,7 +46,7 @@ A Book for deploying Kubernetes systems on Bare Metal
 	5. Installing MetalLB Load Balancing
 	5. Cisco ACI for Network overlays
 
-* [Chapter 6: Kubernetes Installation - Part 3 HA Masters](chapters/05-hakubernetes)
+* [Chapter 6: Kubernetes Verification](chapters/05-hakubernetes)
 
 	6. Adding in redundant master nodes
 	6. Configuration changes
@@ -66,6 +68,7 @@ A Book for deploying Kubernetes systems on Bare Metal
 	8. Networking Types
 	8. Ingress Controllers: Traefik, Nginx, HA-Proxy
 	8. Creating Ingress Rules
+	9. TLS
 	8. Istio
 	8. Istio Example Applications
 * [Chapter 9: Kubernetes Monitoring](chapters/09-monitoring)
@@ -74,7 +77,7 @@ A Book for deploying Kubernetes systems on Bare Metal
 	9. Kibana, Elastisearch, Fluentd, 
 	9. Grafana
 	9. App Dynamics
-* [Chapter 10: OnPrem Security](chapters/10-security)
+* [Chapter 10: Security](chapters/10-security)
 
 	10. RBAC
 	10. LDAP
