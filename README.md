@@ -6,7 +6,7 @@ A Book for deploying Kubernetes systems on Bare Metal
 
 	1. Course Introduction
 	2. Understanding Kubernetes
-	3. Kubernetes Architectural Decisions  
+	3. Planning Your Kubernetes Deployment   
 		* Tradeoffs of OnPrem
 		* Tradeoffs of VMs vs. Bare Metal
 		* Tradeoffs of RYO vs. Buying
@@ -15,14 +15,19 @@ A Book for deploying Kubernetes systems on Bare Metal
 * [Chapter 2: Hardware Configuration](chapters/02-bminstall.md)
 	
 	2. Networking Architecture, Design, and Configuration
+		* Video: Configure portchannel
 	2. Storage Architecture and Design
 	2. Server Architecture and Design
-		* OS Installation
+		* Video: Program CIMC, Firmware upgrade, RAID configuration
+		* Video: OS Installation
+
+		
 * [Chapter 3: Linux Configuration](chapters/03-LinuxConfig.md)
 
-	3. ```/etc/hosts```
-	3. SSH Setup
-	3. sudo
+	3. sudo (redo)
+	4. networking (IP Address and networking constructs)
+	5. SSH
+	6. `/etc/hosts`
 	3. hostnames
 	3. Clocks and NTP
 	3. Install and Configure Docker
@@ -71,6 +76,13 @@ A Book for deploying Kubernetes systems on Bare Metal
 	9. TLS
 	8. Istio
 	8. Istio Example Applications
+	
+* [Chapter X: Doing Kubernetes things](chapters/x-things)
+	1. Batch and Cron Jobs
+	2. Stateful Sets
+	3. 
+
+
 * [Chapter 9: Kubernetes Monitoring](chapters/09-monitoring)
 
 	9. Prometheus

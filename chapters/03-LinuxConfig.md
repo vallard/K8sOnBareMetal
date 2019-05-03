@@ -2,7 +2,51 @@
 
 In many environments many of these components may already be setup for you.  Here we focus on how to do it so you know what happens behind the magic. Once you know you can create your own magic. 
 
-In general we would create an Ansible file to do this for us.  That way all files are set correctly for us. But let's go through manually for understanding.  
+In general we would create an Ansible file to do this for us.  That way all files are set correctly for us. But let's go through manually for understanding.
+
+### ```sudo``` without Password
+
+The first thing we need to do is make sure that when we ssh into the machine we aren't prompted for a password every time we do a ```sudo``` command.  
+
+There is a file called /etc/sudoers that is edited using `visudo`.  However, for the non-vim people (which are becoming more and more each day) it defaults to the nano editor.  Let's restore the glory of `vim` by running: 
+
+```
+
+
+If we want to be dangerous we could run the following command on every machine: 
+
+```
+sudo sed -i 's/^%sudo.*/\%sudo  ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+```
+
+That would fix it, but I get a little nervous doing that because once you do it, you lose access to the machine if you make a type-o. If you did that you woudl then need to start all over installing the machine.  You may instead choose to do this part manually by going into each machine and running ```sudo visudo```.  From there you would just make sure you change: 
+
+```
+%sudo  ALL=(ALL:ALL) ALL
+```
+
+To be:
+
+```
+%sudo  ALL=(ALL:ALL) NOPASSWD: ALL
+```
+
+Here is how you could do it for all the machines.  Make sure you don't have type-Os!
+
+```
+for i in $(seq 3); do ssh -t kubec-master-0$i "sudo sed -i 's/^%sudo.*/\%sudo  ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers"; done
+[sudo] password for ubuntu:
+Connection to kubec-master-01 closed.
+[sudo] password for ubuntu:
+Connection to kubec-master-02 closed.
+[sudo] password for ubuntu:
+Connection to kubec-master-03 closed.
+
+for i in $(seq 4); do ssh -t kubec0$i "sudo sed -i 's/^%sudo.*/\%sudo  ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers"; done
+...
+```
+
+The ```-t``` is specified so that you'll need to type in the password when you do ```sudo```, but thankfully, that's the last time we need to do that!  
 
 
 #### ```/etc/hosts```
@@ -99,44 +143,7 @@ Host kubec-master-03
 
 Now you don't have to specify the ```ubuntu``` user every time you ssh into the node. 
 
-### ```sudo``` without Password
 
-The first thing we need to do is make sure that when we ssh into the machine we aren't prompted for a password every time we do a ```sudo``` command.  
-
-If we want to be dangerous we could run the following command on every machine: 
-
-```
-sudo sed -i 's/^%sudo.*/\%sudo  ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
-```
-
-That would fix it, but I get a little nervous doing that because once you do it, you lose access to the machine if you make a type-o. If you did that you woudl then need to start all over installing the machine.  You may instead choose to do this part manually by going into each machine and running ```sudo visudo```.  From there you would just make sure you change: 
-
-```
-%sudo  ALL=(ALL:ALL) ALL
-```
-
-To be:
-
-```
-%sudo  ALL=(ALL:ALL) NOPASSWD: ALL
-```
-
-Here is how you could do it for all the machines.  Make sure you don't have type-Os!
-
-```
-for i in $(seq 3); do ssh -t kubec-master-0$i "sudo sed -i 's/^%sudo.*/\%sudo  ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers"; done
-[sudo] password for ubuntu:
-Connection to kubec-master-01 closed.
-[sudo] password for ubuntu:
-Connection to kubec-master-02 closed.
-[sudo] password for ubuntu:
-Connection to kubec-master-03 closed.
-
-for i in $(seq 4); do ssh -t kubec0$i "sudo sed -i 's/^%sudo.*/\%sudo  ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers"; done
-...
-```
-
-The ```-t``` is specified so that you'll need to type in the password when you do ```sudo```, but thankfully, that's the last time we need to do that!
 
 #### Set the Hostname on all nodes
 
