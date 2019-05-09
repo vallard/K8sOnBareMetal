@@ -24,28 +24,30 @@ A Book for deploying Kubernetes systems on Bare Metal
 		
 * [Chapter 3: Linux Configuration](chapters/03-LinuxConfig.md)
 
-	3. sudo (redo)
-	4. networking (IP Address and networking constructs)
-	5. SSH
-	6. `/etc/hosts`
-	3. hostnames
-	3. Clocks and NTP
-	3. Install and Configure Docker
-	3. Testing Docker
-	3. Swap
+	
+	1. sudo (redo)
+	1. networking (IP Address and networking constructs)
+	1. SSH
+	1. `/etc/hosts`
+	1. hostnames
+	1. Clocks and NTP
+	1. Install and Configure Docker
+	1. Testing Docker
+	1. Swap
 	
 * [Chapter 4: Kubernetes installation](chapters/04-KubernetesInstallation.md)
-	4. Dependencies
-	5. Kubernetes Networking: Calico, Flannel, Weave, Cannel
-	6. kubeadm 
-	8. Install kubernetes networking
-	9. Verify with busy box
-	10. Installing MetalLB Load Balancing
-	11. kubectl locally
-	12. Kubernetes Web UI (Dashboard)
-	12. Helm
-	5. Cisco ACI for Container Networking
-	6. Adding in redundant master nodes	
+
+	1. Dependencies
+	1. Kubernetes Networking: Calico, Flannel, Weave, Cannel
+	1. kubeadm 
+	1. Install kubernetes networking
+	1. Verify with busy box
+	1. Installing MetalLB Load Balancing
+	1. kubectl locally
+	1. Kubernetes Web UI (Dashboard)
+	1. Helm
+	1. Cisco ACI for Container Networking
+	1. Adding in redundant master nodes	
 	
 * [Chapter 5: Kubernetes Application Storage](chapters/07-storage)
 
