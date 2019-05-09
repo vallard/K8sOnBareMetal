@@ -34,62 +34,59 @@ A Book for deploying Kubernetes systems on Bare Metal
 	3. Testing Docker
 	3. Swap
 	
-* [Chapter 4: Kubernetes installation - Part 1 Server](chapters/04-KubernetesInstallation.md)
-
+* [Chapter 4: Kubernetes installation](chapters/04-KubernetesInstallation.md)
 	4. Dependencies
-	4. Load Balancing
-	4. Kubeadm
-	4. Installing Kubernetes Master Nodes
-	4. Troubleshooting
-	4. Adding Nodes
+	5. Kubernetes Networking: Calico, Flannel, Weave, Cannel
+	6. kubeadm 
+	8. Install kubernetes networking
+	9. Verify with busy box
+	10. Installing MetalLB Load Balancing
+	11. kubectl locally
+	12. Kubernetes Web UI (Dashboard)
+	12. Helm
+	5. Cisco ACI for Container Networking
+	6. Adding in redundant master nodes	
 	
-* [Chapter 5: Kubernetes Installation - Part 2 Networking](chapters/05-networking.md)
+* [Chapter 5: Kubernetes Application Storage](chapters/07-storage)
 
-	5. Overlay Networks: Channel, Calico, Flannel, Weave
-	5. Installing Calico
-	5. Verifying Cluster
-	5. Installing MetalLB Load Balancing
-	5. Cisco ACI for Network overlays
-
-* [Chapter 6: Kubernetes Verification](chapters/05-hakubernetes)
-
-	6. Adding in redundant master nodes
-	6. Configuration changes
-	6. Verifying changes
-	6. Testing: busybox
-	
-* [Chapter 7: Kubernetes Storage](chapters/07-storage)
-
-	7. Helm
+	7. Ephemeral 
+	8. Volumes basics
+	9. NFS persistent volume 
+	9. Persistant Volumes and Volume Claims
+	7. MySQL Application Example
 	7. Rook
 	7. Operators
 	7. Minio
 	7. Ceph
-	7. Persistant Volumes and Volume Claims
-	7. MySQL Application Example
 	
-* [Chapter 8: More Networking](chapters/08-networking)
+* [Chapter 6: Application Networking](chapters/08-networking)
 
-	8. Networking Types
+	8. Networking Types (ClusterIP, NodePort, LoadBalancer)
 	8. Ingress Controllers: Traefik, Nginx, HA-Proxy
 	8. Creating Ingress Rules
 	9. TLS
 	8. Istio
 	8. Istio Example Applications
 	
-* [Chapter X: Doing Kubernetes things](chapters/x-things)
-	1. Batch and Cron Jobs
+* [Chapter 7: Running Kubernetes](chapters/x-things)
+	1. Updating Applications
+	2. CI/CD: Drone
+	3. Batch and Cron Jobs
+	4. Daemon Set
 	2. Stateful Sets
-	3. 
+	3. KubeFlow
+	4. Autoscaling
 
 
-* [Chapter 9: Kubernetes Monitoring](chapters/09-monitoring)
+
+* [Chapter 8: Kubernetes Monitoring](chapters/09-monitoring)
 
 	9. Prometheus
 	9. Kibana, Elastisearch, Fluentd, 
 	9. Grafana
-	9. App Dynamics
-* [Chapter 10: Security](chapters/10-security)
+	9. Vendor Monitoring: App Dynamics, Others
+
+* [Chapter 9: Security](chapters/10-security)
 
 	10. RBAC
 	10. LDAP
