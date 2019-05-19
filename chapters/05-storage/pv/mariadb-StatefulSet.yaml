@@ -68,9 +68,6 @@ spec:
       resources:
         requests:
           storage: 10Gi
-      selector:
-        matchLabels:
-          app: mariadb
-      storageClassName: hyperflex
+      storageClassName: rook-ceph-block
 status:
   replicas: 0

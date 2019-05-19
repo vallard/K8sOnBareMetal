@@ -1,8 +1,94 @@
-# 7.2 Volumes
+# Application Storage
 
-We already explained a use case of how kubeless uses volumes.  Let's go through a few examples of volumes to make things more concrete.  We'll first use a generic NFS mount and then move to ConfigMaps and Secrets.  
+# Kubernetes Storage
 
-## 7.2.1 NFS Volume Example
+## 5.1 Introduction and Overview
+
+### 5.1.1 Containers are Ephemeral 
+Microservices are all about stateless systems.  Even kubernetes itself services such as the API service, the controller and scheduler all run stateless, getting their data from [etcd](https://coreos.com/etcd/)
+
+We can launch deployments and then go change the runing containers but when they restart, all changes are lost. 
+
+This was the original design of kubernetes and microservices:  Applications should be stateless and state should be a service that lives elsewhere.  We've come a long way since then and Kubernetes has evolved to give us persistence.  
+
+Let's first look at the default behavior.  Consider the case of our favorite Nginx web service.  We can start a container and expose the service: 
+
+```
+kubectl run nx --image=nginx 
+kubectl expose deployment nx --port=80 --target-port=80 --type=LoadBalancer
+```
+
+Now we can visit this service in our web browser and see the normal nginx welcome screen. 
+
+![img](images/storage01.png)
+
+
+Now let's edit the pod: 
+
+```
+kubectl get pods -l run=nx
+...
+nx-d8f5c6d58-dt7gj ....
+...
+```
+We can now log into it: 
+
+```
+kubectl exec -it nx-d8f5c6d58-dt7gj /bin/bash
+# now on the pod
+root@nx-d8f5c6d58-dt7gj:/# cd /usr/share/nginx/html/
+root@nx-d8f5c6d58-dt7gj:/usr/share/nginx/html# echo "hello from this pod" > index.html
+```
+
+Refreshing the page we get: 
+
+```
+hello from this pod
+```
+
+But by deleting the pod: 
+ 
+```
+root@nx-d8f5c6d58-dt7gj:/usr/share/nginx/html# exit
+kubectl delete pod nx-d8f5c6d58-dt7gj
+```
+
+And refreshing the page, we get the nginx welcome site again.  
+
+## 5.2 Volumes
+
+Kubernetes has the concept of Volumes.  Volumes are a way to have storage be independent of the Pod but provisioned as part of a workload like any other Kubernetes resource.  
+
+Volumes are defined as part of the pod definition:
+
+```
+   spec:
+      containers:
+      - image: nginx
+        name: ngxnfs
+        volumeMounts:
+          - name: nfsvol
+            mountPath: /usr/share/nginx/html/
+```
+In the above we see there is some volume named `nfsvol` and it is mounted on the container at the `/user/share/nginx/html` path.  Whatever creates the nfsvol is independent of the container.  `nfsvol` can be AWS Elastic Block Storage, a file on a local node, resource in Kubernetes or anything.  And that volume part must also be defined as part of the definition. 
+
+Other properties of Volumes include: 
+
+* __Plugins__ Both volumes have the idea of 'plugins' where different backends can be added.  This includes the usual public cloud suspects, Ceph, NFS, local disks, and up and coming kubernetes storage providers. Different plugins have different implementations.  Some will persist when the containers are gone, others will be destroyed. 
+
+* __Containers Share the Storage__ As noted, a Pod can consist of multiple containers.  Often there is only one container per pod, but in cases where multiple containers are in the same pod and need to share some type of data, these containers will share the storage volume.  
+
+* __Predefined By Administrator__ Depending on your kubernetes environment different volume plugins will be available to users. Naturally, on a Kubernetes cluster running internally you wouldn't expect to be able to consume an AWS EBS volume. What can be used is dependent on where the pods are running.  We will talk about ways to abstract this later.
+
+* __Many types can be used at the same time__ If you have a container that requires iSCSI, NFS, Ceph, and an empty filesystem then these can all be defined on the same system and used by the same pod.  While this is pretty ridiculous, its nice to know that Kubernetes is quite capable. 
+
+### 5.2.1 Kubeless Use case
+
+Let's examine a use case. [`kubeless`](https://kubeless.io) is a function as a service implementation for Kubernetes.  As part of kubeless a user will submit code that might be written in golang which can then be called from an API.  How does kubeless do this?  It uses the concept of an `initContainer`.  An `initContainer` is a container that runs a job before the main container in the pod will start running.  The `initContainer` takes the code submitted by the user and compiles it along with the preexisting code the container has.  It uses the `emptydir` plugin which takes a local directory on the node the pod is placed on and compiles into that directory.  Next the runtime container takes the compiled code and executes it as its main command.  The volume is only required for the lifetime of the pod. 
+
+## 5.3 NFS Volume Example
+
+Let's illustrate a way we could provision a volume for consumption in our data center using NFS. 
 
 Our NFS server is a simple ubuntu server running NFS.  We followed [simple instructions](https://www.smarthomebeginner.com/install-configure-nfs-server-ubuntu/) to create a volume called `/nfs/vol1` on the server with IP address `172.28.225.138`.  
 
@@ -44,7 +130,7 @@ spec:
       - name: nfsvol
         nfs:
           server: 172.28.225.138
-          path: /nfs/vol1
+          path: /nfs/vol1/nginx/html
 ---
 apiVersion: v1
 kind: Service
@@ -70,18 +156,11 @@ When we navigate to the service we see that it has the contents of our NFS serve
 kubectl scale --replicas=5 deployment ngxnfs
 ```
 
-## 7.2.2 Projected Volume Example
+## 5.4 ConfigMaps & Secrets
 
-There is often data we want applications running in our pods to get.  A `projected` volume is a way we can combine data from different kubernetes contructs into a single volume.  These kubernetes resources include: 
+There are two volumes that are used quite a lot in Kubernetes that represent configuration for applications or secrets that might be needed by the application.  Let's take a look at these with an example. 
 
-* `secret`
-* `downwardAPI`
-* `configMap`
-* `serviceAccountTokens` 
-
-Let's introduce a few of these for our sample we will make.  
-
-### 7.2.2.1 Kubernetes Secrets
+### 5.4.1 Kubernetes Secrets
 
 The twelve factor app was introduced to the world around 2011 by developers at PaaS providers Heroku.  In this "manifesto" 12 important attributes of SaaS based applications are defined.  This manifesto is somewhat of an ancestor to today's microservices.  
 
@@ -91,28 +170,21 @@ In a kubernetes environments, how can we get things like database passwords to a
 
 Secrets are a yaml file that inject environment variables or files into a pod if we use them as volumes.  
 
+### 5.4.2 ConfigMap
 
+A [ConfigMap](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/) holds configuration information for a pod.  By decoupling the configuration information from a Pod we can run a pod in different kubernetes environments. It's similar to Kubernetes secrets but the contents are usually less sensitive and they are not base64 encoded. 
 
-### 7.2.2.2 ConfigMap
-
-A [ConfigMap](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/) holds configuration information for a pod.  By decoupling the configuration information from a Pod we can run a pod in different kubernetes environments. It's similar to Kubernetes secrets but the contents are usually less sensitive and they are not base64 encoded.  
-
-### 7.2.2.3 Implementing a Projected Volume
-
-In Kubernetes 1.11 projected volumes are an alpha construct.  Therefore, anything pre Kubernetes 1.11 will require that the feature be enabled.  
-
-
-### 7.2.2.4 Generic example
+### 5.4.3 Volex Example with ConfigMap and Secrets
 
 Let's first deploy a standard flask python application that can read environment variables. This example will look like a standard web page:
 
 ```
-kubectl create -f https://raw.githubusercontent.com/vallard/K8sOnBareMetal/master/chapters/07-storage/volumes/projected/volex.yaml
+kubectl create -f https://raw.githubusercontent.com/vallard/K8sOnBareMetal/master/chapters/05-storage/volex/volex.yaml
 ```
 
 From this you will see a (not-so) nice page of generic HTML that doesn't look too interesting. 
 
-![img](images/02.png) 
+![img](../images/storage02.png) 
 
 They [python code](https://github.com/vallard/K8sOnBareMetal/blob/master/chapters/07-storage/volumes/projected/showall.py) however shows things could be different depending on whether some files are defined.  
 
@@ -272,6 +344,13 @@ Now how can we mount this volume?  The script expects all items to be mounted in
 Running this we now get our secrets.  By refreshing our webpage we can see the secrets and the configMap information in the Pod: 
 
 ![img](./images/04.png)
+
+
+
+
+
+
+
 
 
 

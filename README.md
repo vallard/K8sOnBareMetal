@@ -60,6 +60,7 @@ A Book for deploying Kubernetes systems on Bare Metal
 	7. Operators
 	7. Minio
 	7. Ceph
+	8. Backups
 	
 * [Chapter 6: Application Networking](chapters/08-networking)
 
