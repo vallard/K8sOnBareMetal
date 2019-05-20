@@ -184,9 +184,9 @@ kubectl create -f https://raw.githubusercontent.com/vallard/K8sOnBareMetal/maste
 
 From this you will see a (not-so) nice page of generic HTML that doesn't look too interesting. 
 
-![img](../images/storage02.png) 
+![img](images/storage02.png) 
 
-They [python code](https://github.com/vallard/K8sOnBareMetal/blob/master/chapters/07-storage/volumes/projected/showall.py) however shows things could be different depending on whether some files are defined.  
+The [python code](https://github.com/vallard/K8sOnBareMetal/blob/master/chapters/05-storage/volex/showall.py) however shows things could be different depending on whether some files are defined.  
 
 The code looks like: 
 
@@ -231,7 +231,7 @@ app.run(debug = True)
 
 Notice that in the above code we are looking for four different files that define the username, password, bgcolor, and text color.  We can define these by adding a configmap and some secrets.
 
-### 7.2.2.4 Adding the ConfigMap  
+#### 5.4.3.1 Adding the ConfigMap  
 
 Let's create a configmap:
 
@@ -276,13 +276,28 @@ Now that we have these, we need to mount them as a volume.  We can edit our pod 
 
 To our pod definition.  Here in the `spec` we add `volumeMounts`.  This references the volume named `volex-vol` defined below.  We give it a mount path as to where the configMap should be mounted.  Here we are telling it to go to `/tmp/projected`.  
 
-Below in the `volumes` section we tell it that `volex-vol` is of type `configMap` so Kubernetes knows to use the `configMap` plugin (which is actually built into Kubernetes).  By specifying the key `bgcolor` and the file `configmap/bgcolor` then adding this to the `mountPath` above, we find that the pod will have a file in `/tmp/projected/configmap/bgcolor`.  This is exactly what the python flask server expects above.  It can now read in the parameters.  Since we've set our background color to black (#000) and the text white (#fff) refreshing after applying this configuration gives us: 
+Below in the `volumes` section we tell it that `volex-vol` is of type `configMap` so Kubernetes knows to use the `configMap` plugin (which is actually built into Kubernetes).  By specifying the key `bgcolor` and the file `configmap/bgcolor` then adding this to the `mountPath` above, we find that the pod will have a file in `/tmp/projected/configmap/bgcolor`.  This is exactly what the python flask server expects above.  It can now read in the parameters.  
 
-![img](./images/03.png)
+Let's create these resources with: 
+
+```
+kubectl create -f https://raw.githubusercontent.com/vallard/K8sOnBareMetal/master/chapters/05-storage/volex/configmap.yaml
+```
+Either manually update with `kubectl edit deployment volex` or apply with: 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/vallard/K8sOnBareMetal/master/chapters/05-storage/volex/volex-cfm.yaml
+```
+
+
+
+Since we've set our background color to black (#000) and the text white (#fff) refreshing after applying this configuration gives us: 
+
+![img](images/storage03.png)
 
 Notice, that if you define the pod and don't actually have a volume with configmap named `volex` the pod will never load.  That's actually true of any volume.  If the pod is referencing a volume that doesn't exist, the pod will never run. 
 
-### 7.2.2.5 Adding Secrets
+#### 5.4.3.2 Adding Secrets  
 
 Let's now add some secrets. Let's suppose this app connected to a database.  We would then need a username and password.  Let's suppose our username is `beyonce` and the password is `putaring0n!t`.  To create secrets, we first need to base64 encode these items:
 
@@ -311,6 +326,13 @@ We then create this secret:
 ```
 kubectl create -f secret.yaml
 ```
+
+Alternatively you can create from an already created secret on the internet: 
+
+```
+kubectl create -f https://raw.githubusercontent.com/vallard/K8sOnBareMetal/master/chapters/05-storage/volex/secret.yaml
+```
+
 Now how can we mount this volume?  The script expects all items to be mounted in the same directory.  But if we try that we get an error as each volume can only be mounted at one spot.  We did use subdirectories so we can use that for the secrets:
 
 ```
@@ -339,6 +361,12 @@ Now how can we mount this volume?  The script expects all items to be mounted in
             path: password
           secretName: volex
 ...
+```
+
+Modify your `volex` deployment with: 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/vallard/K8sOnBareMetal/master/chapters/05-storage/volex/volex-cm-secrets.yaml
 ```
 
 Running this we now get our secrets.  By refreshing our webpage we can see the secrets and the configMap information in the Pod: 
