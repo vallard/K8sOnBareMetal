@@ -73,14 +73,11 @@ A Book for deploying Kubernetes systems on Bare Metal
 	
 * [Chapter 7: Running Kubernetes](chapters/x-things)
 	1. Updating Applications
-	2. CI/CD: Drone
 	3. Batch and Cron Jobs
 	4. Daemon Set
 	2. Stateful Sets
-	3. KubeFlow
+	3. Serverless Platforms
 	4. Autoscaling
-
-
 
 * [Chapter 8: Kubernetes Monitoring](chapters/09-monitoring)
 
@@ -91,7 +88,8 @@ A Book for deploying Kubernetes systems on Bare Metal
 
 * [Chapter 9: Security](chapters/10-security)
 
-	10. RBAC
+	10. Audit Logs
+	11. RBAC
 	10. LDAP
 	10. Harbor
 	10. Umbrella
